@@ -9,4 +9,4 @@ sudo docker volume create servervol;
 echo "Volume for server gets created successfully...";
 
 sudo docker build -t serverimage:1.0 ./server/.;
-sudo docker run -dp 8088:80 --name=ServerContainer --mount source=servervol,target=/serverdata --network=mynetwork1 --ip=172.168.11.42 serverimage:1.0 /bin/bash;
+sudo docker run -d --user=root --name=ServerContainer --mount source=servervol,target=/serverdata --network=mynetwork1 --ip=172.168.11.42 serverimage:1.0 /bin/sh;
