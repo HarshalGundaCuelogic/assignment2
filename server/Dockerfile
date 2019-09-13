@@ -1,9 +1,21 @@
 #FROM centos:latest
 FROM alpine:latest
 WORKDIR /serverdata
+#RUN apk update
+RUN apk add openrc 
+RUN apk add openssh
+RUN apk add sshpass
+
 COPY ./1.txt /serverdata
-COPY ./run_server.sh /tmp 
-RUN sh /tmp/run_server.sh
+#COPY ./run_server.sh /tmp 
+#RUN sh /tmp/run_server.sh
+RUN rc-status
+RUN touch /run/openrc/softlevel
+RUN rc-service sshd restart
+#RUN mkdir -m777 /root/.ssh
+
+RUN adduser --disabled-password --gecos "" server
+RUN echo server:123456 | chpasswd
 
 #RUN apk add openrc 
 #RUN apk add openssh
