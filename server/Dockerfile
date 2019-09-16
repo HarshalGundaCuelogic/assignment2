@@ -2,20 +2,17 @@
 FROM alpine:latest
 WORKDIR /serverdata
 #RUN apk update
+COPY ./1.txt /serverdata
+RUN md5sum 1.txt > checksum.md5
 RUN apk add openrc 
 RUN apk add openssh
 RUN apk add sshpass
-
-COPY ./1.txt /serverdata
-#COPY ./run_server.sh /tmp 
-#RUN sh /tmp/run_server.sh
 RUN rc-status
 RUN touch /run/openrc/softlevel
-RUN rc-service sshd restart
-#RUN mkdir -m777 /root/.ssh
-
-RUN adduser --disabled-password --gecos "" server
-RUN echo server:123456 | chpasswd
+RUN rc-service sshd start
+RUN rc-service sshd status
+RUN adduser --disabled-password --gecos "" alpineserver
+RUN echo alpineserver:harshal | chpasswd
 
 #RUN apk add openrc 
 #RUN apk add openssh
