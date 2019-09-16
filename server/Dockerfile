@@ -1,19 +1,25 @@
-#FROM centos:latest
+
 FROM alpine:latest
 WORKDIR /serverdata
-#RUN apk update
+
 COPY ./1.txt /serverdata
+COPY ./run_server.sh /home
 RUN md5sum 1.txt > checksum.md5
 RUN apk add openrc 
 RUN apk add openssh
 RUN apk add sshpass
 RUN rc-status
 RUN touch /run/openrc/softlevel
-RUN rc-service sshd start
-RUN rc-service sshd status
+
+ENTRYPOINT ["/bin/sh","/home/run_server.sh"]
+
 RUN adduser --disabled-password --gecos "" alpineserver
 RUN echo alpineserver:harshal | chpasswd
 
+
+#FROM centos:latest
+#RUN apk update
+#RUN rc-service sshd start
 #RUN apk add openrc 
 #RUN apk add openssh
 #RUN rc-status
